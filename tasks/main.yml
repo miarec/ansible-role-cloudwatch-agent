@@ -1,0 +1,27 @@
+---
+- name: Preflight
+  include_tasks: preflight.yml
+
+# Check to see if installed?
+
+- name: Install cloudwatch-agent
+  include_tasks: install-cwagent.yml
+
+- name: Configure cloudwatch-agent
+  include_tasks: configure-cwagent.yml
+
+
+# - name: Check if rtpengine is installed
+#   command: "which {{ rtpengine_install_dir }}/usr/bin/rtpengine"
+#   register: rtpengine_exists
+#   failed_when: false
+#   ignore_errors: true
+#   changed_when: false
+
+
+# - name: Install rtpengine from Source
+#   include_tasks: install_from_source.yml
+#   when: rtpengine_force_install|bool or rtpengine_exists.rc != 0
+
+# - name: Configure rtpengine.
+#   include_tasks: configure.yml

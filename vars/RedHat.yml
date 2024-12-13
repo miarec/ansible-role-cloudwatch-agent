@@ -1,0 +1,6 @@
+---
+
+# versioned install is not supported, only 'latest'
+# https://github.com/aws/amazon-cloudwatch-agent/issues/503
+cwagent_download_url: https://amazoncloudwatch-agent.s3.amazonaws.com/redhat/amd64/latest/amazon-cloudwatch-agent.rpm
+cwagent_gpg_key_url: https://amazoncloudwatch-agent.s3.amazonaws.com/redhat/amd64/latest/amazon-cloudwatch-agent.rpm.sig

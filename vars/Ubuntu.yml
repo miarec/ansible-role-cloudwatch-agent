@@ -1,0 +1,6 @@
+---
+
+# versioned install is not supported, only 'latest'
+# https://github.com/aws/amazon-cloudwatch-agent/issues/503
+cwagent_download_url: https://amazoncloudwatch-agent.s3.amazonaws.com/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+cwagent_gpg_key_url: https://amazoncloudwatch-agent.s3.amazonaws.com/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb.sig
