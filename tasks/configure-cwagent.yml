@@ -1,6 +1,7 @@
 ---
-
 # Generate config file
-
-
-# notify handlers
+- name: Create Config file from Template
+  copy:
+    content: "{{ cwagent_config_file_content }}"
+    dest: "/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json"
+  notify: restart amazon-cloudwatch-agent

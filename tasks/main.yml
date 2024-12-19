@@ -17,11 +17,3 @@
 #   failed_when: false
 #   ignore_errors: true
 #   changed_when: false
-
-
-# - name: Install rtpengine from Source
-#   include_tasks: install_from_source.yml
-#   when: rtpengine_force_install|bool or rtpengine_exists.rc != 0
-
-# - name: Configure rtpengine.
-#   include_tasks: configure.yml
