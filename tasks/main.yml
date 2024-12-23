@@ -2,18 +2,18 @@
 - name: Preflight
   include_tasks: preflight.yml
 
-# Check to see if installed?
+- name: Check if cloudwatch-agent is installed
+  command: "which /opt/aws/amazon-cloudwatch-agent/bin/start-amazon-cloudwatch-agent"
+  register: _cwagent_exists
+  failed_when: false
+  ignore_errors: true
+  changed_when: false
 
 - name: Install cloudwatch-agent
   include_tasks: install-cwagent.yml
+  when: _cwagent_exists.rc != 0
 
 - name: Configure cloudwatch-agent
   include_tasks: configure-cwagent.yml
 
 
-# - name: Check if rtpengine is installed
-#   command: "which {{ rtpengine_install_dir }}/usr/bin/rtpengine"
-#   register: rtpengine_exists
-#   failed_when: false
-#   ignore_errors: true
-#   changed_when: false

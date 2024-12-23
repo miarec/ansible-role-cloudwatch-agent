@@ -76,7 +76,7 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - _cwagent_pkg.dest
-    - _cwagent_gpg.dest
-    - _cwagent_public_key.dest
+    - "{{ _cwagent_pkg.dest }}"
+    - "{{ _cwagent_gpg.dest }}"
+    - "{{ _cwagent_public_key.dest }}"
   when: cwagent_cleanup_downloads|bool
