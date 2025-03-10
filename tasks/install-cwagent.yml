@@ -1,13 +1,4 @@
 ---
-# this might change with other OS, will verify when I do full testing
-- name: Install Addtional Packages
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - collectd  # this is required if you are using logs
-
-
 # download package
 - name: Download cwagent Package from S3 # noqa risky-file-permissions
   get_url:
