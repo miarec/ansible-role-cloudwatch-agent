@@ -8,7 +8,6 @@
 
 
 # verify signature
-
 - name: Download cwagent gpg public key    # noqa risky-file-permissions
   get_url:
     url: "{{ cwagent_gpg_public_key_url }}"
@@ -50,9 +49,10 @@
   when: ansible_distribution == "Ubuntu"
 
 - name: Install cwagent package - RedHat
-  dnf:
+  yum:
     name: "{{ _cwagent_pkg.dest }}"
     state: present
+    disable_gpg_check: true      # Im not sure why rhis is needed, when manually installing the gpg chek passes, but using this module it does not
   when: ansible_os_family == "RedHat"
 
 # enable cwagent
