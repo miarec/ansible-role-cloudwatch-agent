@@ -1,0 +1,57 @@
+---
+    name: Ansible role testing
+    "on":
+      pull_request:
+      push:
+        branches:
+          - master
+        paths-ignore:
+          - '**.md'
+      schedule:
+        - cron: "30 7 1 * *"
+
+    jobs:
+      lint:
+        name: lint
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Check out the repository
+            uses: actions/checkout@v4
+
+          - name: Run ansible-lint
+            uses: ansible/ansible-lint-action@v6
+
+      test:
+        name: molecule
+        runs-on: ubuntu-latest
+        strategy:
+          fail-fast: false
+          matrix:
+            distro:
+              - ubuntu2204
+              - ubuntu2404
+              - rockylinux8
+              - rockyllinux9
+              - rhel8
+              - rhel9
+              - centos7
+
+        steps:
+          - name: Check out the Repository
+            uses: actions/checkout@v4
+
+          - name: Set up Python3
+            uses: actions/setup-python@v5
+            with:
+              python-version: '3.x'
+
+          - name: Install test dependencies
+            run: pip3 install -r molecule/default/test-requirements.txt
+
+          - name: Run molecule test
+            run: molecule test
+            env:
+              PY_COLORS: '1'
+              ANSIBLE_FORCE_COLOR: '1'
+              MOLECULE_DISTRO: ${{ matrix.distro }}

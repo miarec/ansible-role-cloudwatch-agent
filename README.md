@@ -1,6 +1,7 @@
 # ansible-role-cloudwatch-agent
 Ansible role to install amazon cloudwatch agent for monitoring instances with AWS Cloudwatch. This role can be used on non AWS instances as well.
 
+![CI](https://github.com/miarec/ansible-role-cloudwatch-agent/actions/workflows/ci.yml/badge.svg?event=push)
 
 
 Requirements
