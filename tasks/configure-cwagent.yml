@@ -4,5 +4,7 @@
   copy:
     content: "{{ cwagent_config_file_content | to_nice_json }}"
     dest: "/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json"
-
+    owner: root
+    group: root
+    mode: '0755'
   notify: Restart amazon-cloudwatch-agent
