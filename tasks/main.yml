@@ -15,5 +15,3 @@
 
 - name: Configure cloudwatch-agent
   include_tasks: configure-cwagent.yml
-
-

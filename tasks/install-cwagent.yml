@@ -26,7 +26,7 @@
 
 - name: Verify signature of the cwagent package
   shell: |
-    gpg --import {{_cwagent_public_key.dest}}
+    gpg --import {{ _cwagent_public_key.dest }}
     gpg --verify {{ _cwagent_gpg.dest }} {{ _cwagent_pkg.dest }}
   register: _signature_verified
   failed_when: "'BAD' in _signature_verified.stderr or 'gpg: no valid OpenPGP data found' in _signature_verified.stderr"
