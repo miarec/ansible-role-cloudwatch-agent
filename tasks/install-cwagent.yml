@@ -1,0 +1,73 @@
+---
+# download package
+- name: Download cwagent Package from S3 # noqa risky-file-permissions
+  get_url:
+    url: "{{ cwagent_download_url }}"
+    dest: "{{ cwagent_pkg_path }}"
+  register: _cwagent_pkg
+
+
+# verify signature
+- name: Download cwagent gpg public key    # noqa risky-file-permissions
+  get_url:
+    url: "{{ cwagent_gpg_public_key_url }}"
+    dest: "{{ cwagent_pkg_path }}"
+  when:
+    - cwagent_verify_gpg_signature|bool
+  register: _cwagent_public_key
+
+- name: Download cwagent gpg signature    # noqa risky-file-permissions
+  get_url:
+    url: "{{ cwagent_gpg_key_url }}"
+    dest: "{{ cwagent_pkg_path }}"
+  when:
+    - cwagent_verify_gpg_signature|bool
+  register: _cwagent_gpg
+
+- name: Verify signature of the cwagent package
+  shell: |
+    gpg --import {{ _cwagent_public_key.dest }}
+    gpg --verify {{ _cwagent_gpg.dest }} {{ _cwagent_pkg.dest }}
+  register: _signature_verified
+  failed_when: "'BAD' in _signature_verified.stderr or 'gpg: no valid OpenPGP data found' in _signature_verified.stderr"
+  when:
+    - cwagent_verify_gpg_signature|bool
+  changed_when: false
+
+- name: Assert that the pacakge signature is verified
+  assert:
+    that: "_signature_verified.rc == 0"
+  when:
+    - cwagent_verify_gpg_signature|bool
+  changed_when: false
+
+# install package
+- name: Install cwagent package - Ubuntu
+  apt:
+    deb: "{{ _cwagent_pkg.dest }}"
+    state: present
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install cwagent package - RedHat
+  yum:
+    name: "{{ _cwagent_pkg.dest }}"
+    state: present
+    disable_gpg_check: true      # Im not sure why rhis is needed, when manually installing the gpg chek passes, but using this module it does not
+  when: ansible_os_family == "RedHat"
+
+# enable cwagent
+- name: Start and Enable cwagent service
+  service:
+    name: amazon-cloudwatch-agent
+    enabled: true
+    state: started
+
+- name: Clean up the source files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ _cwagent_pkg.dest }}"
+    - "{{ _cwagent_gpg.dest }}"
+    - "{{ _cwagent_public_key.dest }}"
+  when: cwagent_cleanup_downloads|bool

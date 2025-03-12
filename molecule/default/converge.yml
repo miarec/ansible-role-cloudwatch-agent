@@ -1,0 +1,23 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  pre_tasks:
+    # - name: Define Variables
+    #   set_fact:
+    #     # rtpengine_version: "{{ lookup('env', 'RTPENGINE_VERSION') }}"
+
+    - name: Install prerequisites
+      block:
+        - name: Update apt cache
+          when: ansible_os_family == "Debian"
+          apt:
+            update_cache: true
+            cache_valid_time: 600
+          changed_when: false
+
+  roles:
+    - role: ansible-role-cloudwatch-agent
+      tags:
+        - cloudwatch-agent

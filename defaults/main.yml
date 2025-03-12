@@ -1,0 +1,33 @@
+---
+# defaults file for cloudwatch-agent
+
+cwagent_pkg_path: /tmp
+
+cwagent_verify_gpg_signature: true
+cwagent_gpg_public_key_url: https://amazoncloudwatch-agent.s3.amazonaws.com/assets/amazon-cloudwatch-agent.gpg
+
+cwagent_cleanup_downloads: true
+
+
+cwagent_config_file_content: |
+  {
+          "agent": {
+                  "metrics_collection_interval": 60,
+                  "run_as_user": "cwagent"
+          },
+          "logs": {
+                  "logs_collected": {
+                          "files": {
+                                  "collect_list": [
+                                          {
+                                                  "file_path": "/var/log/syslog",
+                                                  "log_group_class": "STANDARD",
+                                                  "log_group_name": "syslog",
+                                                  "log_stream_name": "{instance_id}",
+                                                  "retention_in_days": -1
+                                          }
+                                  ]
+                          }
+                  }
+          }
+  }
